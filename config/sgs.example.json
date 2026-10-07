@@ -1,0 +1,12 @@
+{
+  "schema": "sgs/runtime-profile@1",
+  "profile_name": "new-host-read-only",
+  "discovery_roots": ["${HOME}/.codex/skills", "${HOME}/.agents/skills"],
+  "cold_store": ".sgs/cold-store",
+  "authorization_directory": ".sgs/authorizations",
+  "host_binding": null,
+  "production_writes_enabled": false,
+  "native_desktop": "UNKNOWN",
+  "artifacts": {},
+  "candidates": {}
+}

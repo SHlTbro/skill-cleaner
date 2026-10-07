@@ -1,0 +1,13 @@
+import { mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { parseOptions } from '../src/runtime/arguments.mjs';
+import { loadRuntime } from '../src/runtime/config.mjs';
+import { scanScopeFor } from '../src/deployment.mjs';
+const {options:values}=parseOptions(process.argv.slice(2),{values:['config','out']});
+if(!values.out)throw new Error('--out is required');
+const runtime=loadRuntime({configFile:values.config});
+const scope=scanScopeFor(runtime);const roots=scope.roots;
+const file=path.resolve(values.out);
+mkdirSync(path.dirname(file),{recursive:true});
+writeFileSync(file,JSON.stringify(scope,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({scope_file:file,roots:roots.length,scan_executed:false,follow_external_links:false}));

@@ -1,0 +1,14 @@
+{
+  "schema": "sgs/public-new-user-acceptance@1",
+  "version": "0.2.0-rc1",
+  "status": "PASS",
+  "fixed": 20,
+  "regression": {
+    "passed": 20,
+    "total": 20
+  },
+  "existing_isolated_regression": 8,
+  "clean_room_checks": 19,
+  "production_writes_enabled": false,
+  "real_user_skill_writes": 0
+}

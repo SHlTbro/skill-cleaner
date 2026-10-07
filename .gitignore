@@ -1,0 +1,9 @@
+node_modules/
+.agent-archive/
+.sgs.local.json
+.sgs/
+outputs/
+work/
+.tt-state/
+config/desktop-scan-scope.json
+product/skill-governance/references/runtime.json

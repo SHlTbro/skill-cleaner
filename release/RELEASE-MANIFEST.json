@@ -1,0 +1,83 @@
+{
+  "schema": "sgs/release-manifest@1",
+  "version": "0.2.0-rc1",
+  "release_date": "2026-10-07",
+  "tested_runtime_files": [
+    {
+      "path": "src/sgs.mjs",
+      "sha256": "4eb7b1172fcd52e5464cfbc16cb60fa311f3717faa807ba44176de6fbd56ecfc"
+    },
+    {
+      "path": "src/cli.mjs",
+      "sha256": "164302b48b7a78b70cbb2ce4c41103f5cc35857db9baf55b8180e7f8c07880fd"
+    },
+    {
+      "path": "src/app.mjs",
+      "sha256": "8a008595150ae5cba7fa5eaabe1b2ae2b7f32317bd2b931fdec50c41e750b7c4"
+    },
+    {
+      "path": "src/cleanup.mjs",
+      "sha256": "4b98885780eb806b40647d99ed1040fc6b42c38f737a7fa1d6714598a068f7ad"
+    },
+    {
+      "path": "src/runtime/config.mjs",
+      "sha256": "c3b4c93a641fb59701e9616c4b0217c30e786709de4b473f0a7de5088e65e52d"
+    },
+    {
+      "path": "src/deployment.mjs",
+      "sha256": "3276d3124e7ef6adc3773a510c0eca41ffe9bc18cd700a6bd0b5308b1d901130"
+    },
+    {
+      "path": "src/runtime/json.mjs",
+      "sha256": "5aaa7791ee9b5df8e0745f1b83d3ae4d8c7060e46002a97d8a8211e0e8071d90"
+    },
+    {
+      "path": "src/runtime/arguments.mjs",
+      "sha256": "e4212a28c5b3444b09ef4fbe8f0daae04f0b3ce710a359b2e96e5780062362ff"
+    },
+    {
+      "path": "src/core/package-fingerprint.mjs",
+      "sha256": "5390752c95602615ca08e5c5355612d9a0d9590a3faf8896a4b407703f17fa35"
+    },
+    {
+      "path": "src/core/filesystem-exposure-backend.mjs",
+      "sha256": "8dc409097538d7d6bd0c68fc46b976d32e07f7735c6a66dc6d6bdd909da7e57a"
+    },
+    {
+      "path": "src/core/production-authorization.mjs",
+      "sha256": "c0a7123d7b546719f5541ab01bbfe89ad1b91eab156d6652d0c8aef4aff14da6"
+    },
+    {
+      "path": "src/filesystem-exposure-backend.mjs",
+      "sha256": "44ba9a73646f2011ce82e3f6366477656abbc2f288a5b6ad21f36a8c9b7ebda6"
+    },
+    {
+      "path": "src/production-authorization.mjs",
+      "sha256": "099b9dbc939a537c42ba768aa7fc71f43e26fd221e4d06c2183eb9a1876986d7"
+    },
+    {
+      "path": "src/scan.mjs",
+      "sha256": "e26f5b98a42815e2c1ccff1364d53745ca5c2ed33fc38b8dbd3409fb42f5bd37"
+    },
+    {
+      "path": "src/profile-dry-run.mjs",
+      "sha256": "8196738f2e06349a97c038bb009eeed4c3bb0ffcda0d83919cd752293745f18f"
+    },
+    {
+      "path": "src/build-governance-ledgers.mjs",
+      "sha256": "57b1141db6fad51f9df21949c6c86dbcf8dac4140bbb2219ffb10a3119acba4a"
+    },
+    {
+      "path": "src/desktop-catalog-evidence.mjs",
+      "sha256": "788b2cd85ee0ee31c85e5cc8da96d8f127327162066190972db768784c3376d6"
+    }
+  ],
+  "tested_input_zip_sha256": "38f6830d56607232ab41bfb3092610d59a692b4dc6af736b78feb3c7adb6956d",
+  "known_limitations": "release/KNOWN-LIMITATIONS.md",
+  "acceptance": [
+    "release/NEW-USER-ACCEPTANCE.json",
+    "release/FINAL-DESKTOP-ACCEPTANCE.json"
+  ],
+  "zip_checksum_delivery": "External SHA256 file alongside ZIP; not embedded to avoid circular self-hashing",
+  "private_state_included": false
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "sgs/public-final-desktop-acceptance@1",
+  "version": "0.2.0-rc1",
+  "status": "PASS",
+  "accepted_date": "2026-10-07",
+  "source": "Actual persisted Codex Desktop tool execution output, matched to the temporary portable pointer and profile",
+  "portable_project_used": true,
+  "portable_profile_used": true,
+  "status_exit": 0,
+  "inventory_from_portable_bootstrap": true,
+  "inventory_coverage": "PARTIAL",
+  "production_writes_enabled": false,
+  "original_pointer_exact_restored": true,
+  "skill_body_unchanged": true,
+  "metadata_acl_restored": true,
+  "formal_status_smoke_exit": 0,
+  "production_state_unchanged": true,
+  "other_skill_writes_by_acceptance": 0,
+  "scope": "Runtime invocation; no global Desktop exposure count claim"
+}

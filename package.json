@@ -1,0 +1,18 @@
+{
+  "name": "skill-cleaner",
+  "version": "0.2.0-rc1",
+  "private": true,
+  "type": "module",
+  "description": "Local Skill discovery governance with scoped evidence and reversible transactions",
+  "engines": {
+    "node": ">=24"
+  },
+  "bin": {
+    "sgs": "src/sgs.mjs"
+  },
+  "scripts": {
+    "sgs": "node src/sgs.mjs",
+    "doctor": "node src/sgs.mjs doctor"
+  },
+  "license": "MIT"
+}
