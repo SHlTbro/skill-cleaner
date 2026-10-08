@@ -1,0 +1,20 @@
+C4Container
+title skill-cleaner — Container structure
+System_Boundary(sgs, "skill-cleaner on the local host") {
+Container(cli, "CLI process", "Node.js 24 / ESM", "Commands, scanner, ledger and transactions")
+ContainerDb(profile, "Profile and inventory", "JSON files", "Configuration and timestamped filesystem snapshots")
+ContainerDb(cold, "Cold store and receipts", "Local filesystem / JSON", "Whole packages and authoritative transaction records")
+}
+System_Ext(roots, "Skill roots", "User-owned installation directories")
+Container_Ext(ps, "Metadata helper", "Windows PowerShell", "Reads ACL and file attributes")
+Rel(cli, profile, "Reads configuration; publishes inventory", "node:fs")
+Rel(cli, roots, "Scans and compares packages", "node:fs / SHA-256")
+Rel(cli, cold, "Moves authorized packages; records state", "Same-volume rename / JSON")
+Rel(cli, ps, "Requests exact metadata", "child_process / JSON")
+UpdateRelStyle(cli, profile, $offsetX="-90", $offsetY="-120")
+UpdateRelStyle(cli, cold, $offsetY="-55")
+UpdateRelStyle(cli, roots, $offsetX="-100", $offsetY="-20")
+UpdateRelStyle(cli, ps, $offsetX="120", $offsetY="30")
+
+
+

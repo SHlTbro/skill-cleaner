@@ -1,0 +1,15 @@
+C4Context
+title skill-cleaner — System Context
+Person(user, "Skill user", "Audits and authorizes local changes")
+System(cleaner, "skill-cleaner", "Local Skill inventory and reversible transactions")
+System_Ext(desktop, "Codex Desktop", "Optional skill-governance invocation")
+System_Ext(skills, "User Skill directories", "Complete packages and installation links")
+Rel(user, cleaner, "Runs audit or authorized changes", "CLI / JSON")
+Rel(desktop, cleaner, "Invokes through thin entry", "Node CLI")
+Rel(cleaner, skills, "Reads; moves only after gates", "Local filesystem")
+UpdateRelStyle(user, cleaner, $offsetX="-80", $offsetY="-105")
+UpdateRelStyle(desktop, cleaner, $offsetX="-100", $offsetY="0")
+UpdateRelStyle(cleaner, skills, $offsetX="70", $offsetY="0")
+
+
+

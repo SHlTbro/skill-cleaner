@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "系统边界 · 谁在使用 skill-cleaner",
+    "output": "assets/diagrams/context.html",
+    "locale": "zh-CN",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/qq2743759880/skill-cleaner.git",
+      "revision": "3d0265d18863bc127b1ae13237e177b30a8c80dd",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "legend": {
+      "entries": {
+        "backend": {
+          "label": "本地工具"
+        },
+        "frontend": {
+          "label": "可选宿主"
+        },
+        "external": {
+          "label": "使用者 / 外部目录"
+        }
+      },
+      "mode": "auto"
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "label": "Skill 使用者",
+      "sublabel": "Windows 终端 / 可选 Desktop",
+      "type": "external",
+      "pos": [
+        40,
+        220
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 12
+        }
+      ]
+    },
+    {
+      "id": "sgs",
+      "label": "skill-cleaner",
+      "sublabel": "本地审计与可逆事务",
+      "type": "backend",
+      "pos": [
+        400,
+        220
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 191
+        }
+      ]
+    },
+    {
+      "id": "desktop",
+      "label": "Codex Desktop",
+      "sublabel": "可选 Skill 调用入口",
+      "type": "frontend",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "product/skill-governance/SKILL.md",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "label": "用户 Skill 安装目录",
+      "sublabel": "完整包与安装链接",
+      "type": "external",
+      "pos": [
+        760,
+        220
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/runtime/config.mjs",
+          "line": 16
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "user-sgs",
+      "from": "user",
+      "to": "sgs",
+      "label": "CLI 命令"
+    },
+    {
+      "id": "desktop-sgs",
+      "from": "desktop",
+      "to": "sgs",
+      "label": "薄入口调用 Node"
+    },
+    {
+      "id": "sgs-skills",
+      "from": "sgs",
+      "to": "skills",
+      "label": "读取 / 授权后移动"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "本地运行",
+      "items": [
+        "无服务端、数据库或网络 API 运行依赖。",
+        "Codex 薄入口可选，终端命令可独立使用。"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "宿主边界",
+      "items": [
+        "文件扫描不等于 Desktop 当前可见入口。",
+        "宿主能力、观察与授权不随项目复制。"
+      ]
+    }
+  ]
+}

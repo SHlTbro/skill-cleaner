@@ -1,0 +1,215 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "授权批次 · 正常执行与等待",
+    "output": "assets/diagrams/transaction.html",
+    "locale": "zh-CN",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/qq2743759880/skill-cleaner.git",
+      "revision": "3d0265d18863bc127b1ae13237e177b30a8c80dd",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "legend": {
+      "entries": {
+        "database": {
+          "label": "事务状态"
+        },
+        "backend": {
+          "label": "处理步骤"
+        }
+      },
+      "mode": "auto"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "已授权路径"
+    },
+    {
+      "id": "hold",
+      "label": "等待 / 冲突保护",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "prepare",
+      "label": "精确批次准备",
+      "lane": "main",
+      "col": 0,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 123
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "gate",
+      "label": "安全门与 before",
+      "lane": "main",
+      "col": 1,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 201
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "move",
+      "label": "整包移入冷存储",
+      "lane": "main",
+      "col": 2,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 153
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "verify",
+      "label": "新 Desktop catalog",
+      "lane": "main",
+      "col": 3,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 276
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "smoke",
+      "label": "exact delta + smoke",
+      "lane": "main",
+      "col": 4,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 270
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "pass",
+      "label": "PASS / 保持 COLD",
+      "lane": "main",
+      "col": 5,
+      "type": "database",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 333
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "wait",
+      "label": "等待证据 / smoke",
+      "lane": "hold",
+      "col": 3,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 301
+        }
+      ],
+      "width": 144
+    }
+  ],
+  "edges": [
+    {
+      "id": "prepare-gate",
+      "from": "prepare",
+      "to": "gate",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "gate-move",
+      "from": "gate",
+      "to": "move",
+      "label": "满足门禁",
+      "role": "main"
+    },
+    {
+      "id": "move-verify",
+      "from": "move",
+      "to": "verify",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "verify-smoke",
+      "from": "verify",
+      "to": "smoke",
+      "label": "证据齐全",
+      "role": "main"
+    },
+    {
+      "id": "smoke-pass",
+      "from": "smoke",
+      "to": "pass",
+      "label": "全部通过",
+      "role": "main"
+    },
+    {
+      "id": "verify-wait",
+      "from": "verify",
+      "to": "wait",
+      "label": "证据缺失",
+      "role": "branch"
+    },
+    {
+      "id": "smoke-wait",
+      "from": "smoke",
+      "to": "wait",
+      "label": "smoke 未通过",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "条件保留",
+      "items": [
+        "本图只展示标题所指的事务分支；完整条件由首页三张视图共同覆盖。",
+        "smoke 未通过仅等待；包/文件漂移或 Desktop 精确差异失败才触发 scoped rollback。"
+      ]
+    }
+  ],
+  "mainPath": [
+    "prepare",
+    "gate",
+    "move",
+    "verify",
+    "smoke",
+    "pass"
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "首次使用 · 先得到只读审计结果",
+    "output": "assets/diagrams/onboarding.html",
+    "locale": "zh-CN",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/qq2743759880/skill-cleaner.git",
+      "revision": "3d0265d18863bc127b1ae13237e177b30a8c80dd",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "legend": {
+      "entries": {
+        "database": {
+          "label": "事务状态"
+        },
+        "backend": {
+          "label": "处理步骤"
+        }
+      },
+      "mode": "auto"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "新用户路径"
+    },
+    {
+      "id": "limited",
+      "label": "覆盖与写入边界",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "doctor",
+      "label": "doctor 检查",
+      "lane": "main",
+      "col": 0,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 37
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "init",
+      "label": "init 只读配置",
+      "lane": "main",
+      "col": 1,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 193
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "scan",
+      "label": "bootstrap 扫描",
+      "lane": "main",
+      "col": 2,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/deployment.mjs",
+          "line": 71
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "ledger",
+      "label": "整包账本 / dry-run",
+      "lane": "main",
+      "col": 3,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/deployment.mjs",
+          "line": 72
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "status",
+      "label": "status / audit",
+      "lane": "main",
+      "col": 4,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 112
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "plan",
+      "label": "plan 查看候选",
+      "lane": "main",
+      "col": 5,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 258
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "partial",
+      "label": "错误与 PARTIAL",
+      "lane": "limited",
+      "col": 2,
+      "type": "backend",
+      "sublabel": "根缺失 / 断链 / 外链",
+      "sources": [
+        {
+          "path": "src/scan.mjs",
+          "line": 218
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "unknown",
+      "label": "Desktop 保持未知",
+      "lane": "limited",
+      "col": 4,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/deployment.mjs",
+          "line": 47
+        }
+      ],
+      "width": 164
+    },
+    {
+      "id": "empty",
+      "label": "候选为空可正常",
+      "lane": "limited",
+      "col": 5,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/runtime/config.mjs",
+          "line": 30
+        }
+      ],
+      "width": 164
+    }
+  ],
+  "edges": [
+    {
+      "id": "doctor-init",
+      "from": "doctor",
+      "to": "init",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "init-scan",
+      "from": "init",
+      "to": "scan",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "scan-ledger",
+      "from": "scan",
+      "to": "ledger",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "ledger-status",
+      "from": "ledger",
+      "to": "status",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "status-plan",
+      "from": "status",
+      "to": "plan",
+      "label": "",
+      "role": "main"
+    },
+    {
+      "id": "scan-partial",
+      "from": "scan",
+      "to": "partial",
+      "label": "范围不足",
+      "role": "branch"
+    },
+    {
+      "id": "status-unknown",
+      "from": "status",
+      "to": "unknown",
+      "label": "无宿主观察",
+      "role": "branch"
+    },
+    {
+      "id": "plan-empty",
+      "from": "plan",
+      "to": "empty",
+      "label": "未接入候选",
+      "role": "branch"
+    }
+  ],
+  "mainPath": [
+    "doctor",
+    "init",
+    "scan",
+    "ledger",
+    "status",
+    "plan"
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "首次结果",
+      "items": [
+        "输出 inventory、包级冲突账本、行动分类和 dry-run JSON。",
+        "Skill 移动数为 0，生产写入开关保持 false。"
+      ]
+    }
+  ]
+}

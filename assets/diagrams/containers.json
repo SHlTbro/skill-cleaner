@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "运行结构 · 一个 Node 进程与本地文件",
+    "output": "assets/diagrams/containers.html",
+    "locale": "zh-CN",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/qq2743759880/skill-cleaner.git",
+      "revision": "3d0265d18863bc127b1ae13237e177b30a8c80dd",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "legend": {
+      "entries": {
+        "external": {
+          "label": "目录 / 子进程"
+        },
+        "backend": {
+          "label": "本地进程"
+        },
+        "database": {
+          "label": "文件存储"
+        }
+      },
+      "mode": "auto"
+    }
+  },
+  "components": [
+    {
+      "id": "cli",
+      "label": "Node CLI 进程",
+      "sublabel": "命令、扫描、账本、事务",
+      "type": "backend",
+      "pos": [
+        400,
+        250
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/app.mjs",
+          "line": 191
+        }
+      ]
+    },
+    {
+      "id": "profile",
+      "label": "Profile 与 inventory",
+      "sublabel": "JSON 文件 / 有界快照",
+      "type": "database",
+      "pos": [
+        400,
+        40
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/deployment.mjs",
+          "line": 78
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "label": "Skill discovery roots",
+      "sublabel": "完整包、脚本与链接",
+      "type": "external",
+      "pos": [
+        40,
+        250
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/scan.mjs",
+          "line": 45
+        }
+      ]
+    },
+    {
+      "id": "cold",
+      "label": "Cold store 与 receipt",
+      "sublabel": "保留完整包 / 事务 JSON",
+      "type": "database",
+      "pos": [
+        760,
+        250
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 153
+        }
+      ]
+    },
+    {
+      "id": "ps",
+      "label": "Windows PowerShell",
+      "sublabel": "读取 ACL 与文件元数据",
+      "type": "external",
+      "pos": [
+        400,
+        460
+      ],
+      "size": [
+        180,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 5
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "cli-profile",
+      "from": "cli",
+      "to": "profile",
+      "label": "读写 JSON"
+    },
+    {
+      "id": "cli-skills",
+      "from": "cli",
+      "to": "skills",
+      "label": "扫描 / 比较"
+    },
+    {
+      "id": "cli-cold",
+      "from": "cli",
+      "to": "cold",
+      "label": "授权后同卷移动"
+    },
+    {
+      "id": "cli-ps",
+      "from": "cli",
+      "to": "ps",
+      "label": "child_process"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "进程内模块",
+      "items": [
+        "scanner → 包指纹 → canonical ledger → dry-run。",
+        "authorization 与 FilesystemExposureBackend 执行事务。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "存储不是数据库服务",
+      "items": [
+        "inventory 是扫描快照；receipt 是事务状态来源。",
+        "rollback 恢复原路径，冲突时拒绝覆盖。"
+      ]
+    }
+  ]
+}

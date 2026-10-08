@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "执行或包漂移 · 只恢复当前批次",
+    "output": "assets/diagrams/recovery-package.html",
+    "locale": "zh-CN",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/qq2743759880/skill-cleaner.git",
+      "revision": "3d0265d18863bc127b1ae13237e177b30a8c80dd",
+      "provider": "github",
+      "link_mode": "web"
+    },
+    "legend": {
+      "entries": {
+        "database": {
+          "label": "事务状态"
+        },
+        "backend": {
+          "label": "处理步骤"
+        }
+      },
+      "mode": "auto"
+    }
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "已授权路径"
+    },
+    {
+      "id": "hold",
+      "label": "等待 / 冲突保护",
+      "variant": "exception"
+    },
+    {
+      "id": "recover",
+      "label": "失败与恢复",
+      "variant": "exception"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "move",
+      "label": "整包移入冷存储",
+      "lane": "main",
+      "col": 0,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 153
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "verify",
+      "label": "新 Desktop catalog",
+      "lane": "main",
+      "col": 1,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 276
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "rollback",
+      "label": "scoped rollback",
+      "lane": "recover",
+      "col": 1,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/cleanup.mjs",
+          "line": 217
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "restore",
+      "label": "原路径精确恢复",
+      "lane": "recover",
+      "col": 2,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 178
+        }
+      ],
+      "width": 144
+    },
+    {
+      "id": "refuse",
+      "label": "拒绝覆盖 / 保留证据",
+      "lane": "hold",
+      "col": 2,
+      "type": "backend",
+      "sublabel": "",
+      "sources": [
+        {
+          "path": "src/core/filesystem-exposure-backend.mjs",
+          "line": 182
+        }
+      ],
+      "width": 144
+    }
+  ],
+  "edges": [
+    {
+      "id": "move-rollback",
+      "from": "move",
+      "to": "rollback",
+      "label": "执行失败",
+      "role": "error"
+    },
+    {
+      "id": "rollback-restore",
+      "from": "rollback",
+      "to": "restore",
+      "label": "比较一致",
+      "role": "main"
+    },
+    {
+      "id": "rollback-refuse",
+      "from": "rollback",
+      "to": "refuse",
+      "label": "路径占用 / 包变化",
+      "role": "error"
+    },
+    {
+      "id": "verify-rollback",
+      "from": "verify",
+      "to": "rollback",
+      "label": "文件 / canonical 漂移",
+      "role": "error"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "条件保留",
+      "items": [
+        "本图只展示标题所指的事务分支；完整条件由首页三张视图共同覆盖。",
+        "smoke 未通过仅等待；包/文件漂移或 Desktop 精确差异失败才触发 scoped rollback。"
+      ]
+    }
+  ]
+}
